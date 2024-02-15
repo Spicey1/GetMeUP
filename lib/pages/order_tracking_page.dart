@@ -18,6 +18,12 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   static const LatLng destination = LatLng(47.781946, 24.621316);
 
   List<LatLng> polylineCoordinates = [];
+  Set<Marker> markers = {
+    const Marker(
+      markerId: MarkerId("destination"),
+      position: destination,
+    )
+  };
 
   /// String get google_maps_flutter => null;
 
@@ -67,16 +73,36 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
               color: Colors.purple,
             )
           },
-          markers: {
-            const Marker(
-              markerId: MarkerId("source"),
-              position: sourceLocation,
-            ),
-            const Marker(
-              markerId: MarkerId("destination"),
-              position: destination,
-            )
-          }),
+          onTap: (position) {
+            setState(() {
+              String id = "source";
+              var marker = Marker(
+                markerId: MarkerId(id),
+                position: position,
+                onTap: () {
+                  print("here");
+                  setState(() {
+                    var temp;
+                    for (var elem in markers) {
+                      if (elem.markerId.value == id) {
+                        temp = elem;
+                      }
+                    }
+                    markers.remove(temp);
+                  });
+                },
+              );
+              var temp;
+              for (var elem in markers) {
+                if (elem.markerId.value == id) {
+                  temp = elem;
+                }
+              }
+              markers.remove(temp);
+              markers.add(marker);
+            });
+          },
+          markers: markers),
     );
   }
 }
