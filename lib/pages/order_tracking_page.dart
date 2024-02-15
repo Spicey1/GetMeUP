@@ -28,14 +28,14 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
       PointLatLng(destination.latitude, destination.longitude),
     );
-
-    if (result.points.isNotEmpty) {
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+    print(result.points);
+    setState(() {
+      if (result.points.isNotEmpty) {
+        for (var point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        }
       }
-      ;
-      setState(() {});
-    }
+    });
   }
 
   @override
