@@ -19,21 +19,21 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
 
   List<LatLng> polylineCoordinates = [];
 
-  // String get google_maps_flutter => null;
+  /// String get google_maps_flutter => null;
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
-
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       "AIzaSyDL9Ua5sgSw5IDJQ7C7hk8vH3SqToanIvk",
       PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
       PointLatLng(destination.latitude, destination.longitude),
     );
+
     if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) =>
-            polylineCoordinates.add(LatLng(point.latitude, point.longitude)),
-      );
+      for (var point in result.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+      ;
       setState(() {});
     }
   }
@@ -49,31 +49,32 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
     return Scaffold(
       appBar: AppBar(
           title: const Text(
-        "Track Order",
+        "Track",
         style: TextStyle(color: Colors.black, fontSize: 16),
       )),
       body: GoogleMap(
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
           },
-          initialCameraPosition: CameraPosition(
+          initialCameraPosition: const CameraPosition(
             target: sourceLocation,
             zoom: 13.5,
           ),
           polylines: {
             Polyline(
-              polylineId: PolylineId("route"),
+              polylineId: const PolylineId("route"),
               points: polylineCoordinates,
+              color: Colors.purple,
             )
           },
           markers: {
-            Marker(
+            const Marker(
               markerId: MarkerId("source"),
-              position: LatLng(46.781946, 23.621316),
+              position: sourceLocation,
             ),
-            Marker(
+            const Marker(
               markerId: MarkerId("destination"),
-              position: LatLng(47.781946, 24.621316),
+              position: destination,
             )
           }),
     );
